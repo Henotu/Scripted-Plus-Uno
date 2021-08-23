@@ -1305,14 +1305,14 @@ function co()
               if challengeSuccess
               then
                 broadcastToAll(currentPlayer.steam_name .. " successfully challenged " .. lastPlayer.steam_name, currentPlayer.color)
-                deck.dealToColor(6, lastPlayer.color)
+                deck.dealToColor(4, lastPlayer.color)
                 yieldState = nil
                 isChallenging = false
                 canChallenge = true
                 nextPlayer(1)
               else
                 broadcastToAll(currentPlayer.steam_name .. " failed at challenging " .. lastPlayer.steam_name, currentPlayer.color)
-                deck.dealToColor(4, currentPlayer.color)
+                deck.dealToColor(6, currentPlayer.color)
                 yieldState = nil
                 isChallenging = false
                 canChallenge = true
