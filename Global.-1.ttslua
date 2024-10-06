@@ -580,7 +580,7 @@ function createStackingButton(button)
     hideDrawButton()
     button.lock()
     button.setColorTint(getColorfromPlayer(currentPlayer.color))
-    button.createButton({click_function='clickStackingButton', label='Click here if \nyou can\'t stack', function_owner=Global, position={0, 0.1, 0}, rotation={0, 180, 0}, width=2500, height=850, font_size=350})
+    button.createButton({click_function='clickStackingButton', label='Click here if \nyou can\'t stack', function_owner=Global, position={0, 0.1, 0}, rotation=rotationPlayerReadable(currentPlayer.color), width=2500, height=850, font_size=350})
 end
 
 function createWildButton(button)
@@ -607,7 +607,7 @@ function createWildButton(button)
         end
     end
     button.setColorTint(getColorfromCard(color))
-    button.createButton({click_function='clickWildButton', label=''.. color, function_owner=Global, position={0, 0.1, 0}, rotation={0, 180, 0}, width=1600, height=325, font_size=350})
+    button.createButton({click_function='clickWildButton', label=''.. color, function_owner=Global, position={0, 0.1, 0}, rotation=rotationPlayerReadable(currentPlayer.color), width=1600, height=325, font_size=350})
 end
 
 function createSevenSelectionButton(button)
@@ -615,14 +615,14 @@ function createSevenSelectionButton(button)
     hideDrawButton()
     button.interactable=false
     button.lock()
-    button.createButton({click_function='clickTakeHandButton', label='Take hand', function_owner=Global, position={0, 0.1, 0}, rotation={0, 180, 0}, width=2000, height=850, font_size=350})
+    button.createButton({click_function='clickTakeHandButton', label='Take hand', function_owner=Global, position={0, 0.1, 0}, rotation=rotationPlayerReadable(currentPlayer.color), width=2000, height=850, font_size=350})
 end
 
 function createChallengeButton(button)
     hideDrawButton()
     button.lock()
     button.setColorTint(getColorfromPlayer(currentPlayer.color))
-    button.createButton({click_function='clickChallengeButton', label='Challenge\n' .. lastPlayer.steam_name, function_owner=Global, position={0, 0.1, 0}, rotation={0, 180, 0}, width=2500, height=850, font_size=350})
+    button.createButton({click_function='clickChallengeButton', label='Challenge\n' .. lastPlayer.steam_name, function_owner=Global, position={0, 0.1, 0}, rotation=rotationPlayerReadable(currentPlayer.color), width=2500, height=850, font_size=350})
 end
 
 function clickTakeHandButton(obj, color)
@@ -1137,6 +1137,16 @@ function getTokenRotation(color)
     elseif color == "Yellow"
     then
         return TOKENROTATIONS.Yellow
+    end
+end
+
+function rotationPlayerReadable(color)
+    local rot = getTokenRotation(color)
+    local flip = math.abs(rot[2] - 180)
+    if flip > 90 then
+        return {0, 180, 0}
+    else
+        return {0, 0, 0}
     end
 end
 
