@@ -28,6 +28,8 @@ TOKENROTATIONS =     {  ["Green"]  = {    0, 180,    0},
                         ["Orange"] = {    0,  90,    0},
                         ["Yellow"] = {    0, 135,    0}}
 
+math.randomseed(os.time())
+
 tokenLocations = {}
 
 currentPlayer = nil
@@ -49,6 +51,7 @@ randPlayerOneOption = true
 zeroSevenOption = false
 jumpInOption = false
 challengeOption = false
+chaosOption = false
 
 startButtonObj_GUID = "d60f3a"
 startButtonObj = nil
@@ -81,6 +84,7 @@ randomOption_GUID = "7f3e9e"
 zeroSevenOption_GUID = "6dbe87"
 jumpInOption_GUID = "055580"
 challengeOption_GUID = "20e735"
+chaosOption_GUID = "03158e"
 
 playerHands = {}
 lastCardPlayedBy = nil
@@ -141,6 +145,7 @@ function onLoad(save_state)
     zeroSevenOptionObject = getObjectFromGUID(zeroSevenOption_GUID)
     jumpInOptionObject = getObjectFromGUID(jumpInOption_GUID)
     challengeOptionObject = getObjectFromGUID(challengeOption_GUID)
+    chaosOptionObject = getObjectFromGUID(chaosOption_GUID)
 
     deck = getObjectFromGUID(deckObject_GUID)
     deck.setPosition({-1.5, 1.5, 0})
@@ -249,6 +254,23 @@ function toggleChallenge(obj, color)
     end
 end
 
+function toggleChaos(obj, color)
+    chaosOption = not chaosOption
+    if chaosOption then
+        obj.editButton({index=0, label='Chaos Rule : On'})
+    else
+        obj.editButton({index=0, label='Chaos Rule : Off'})
+    end
+end
+
+function resetStacktingDraw()
+    if chaosOption then
+        local i = math.random(0,4)
+        if i <= 1 then return end
+    end
+    stacking_Draw = 0
+end
+
 function setUp()
       currentPlayer_label = spawnObject({type="PiecePack_Suns",position = {100, 100, 0}, callback = "updatePlayerLabel"})
       currentDirection_label = spawnObject({type="PiecePack_Suns",position = {100, 100, 0}, callback = "updateDirectionLabel"})
@@ -277,6 +299,7 @@ function hideStartMenu()
     zeroSevenOptionObject.setScale({0,0,0})
     jumpInOptionObject.setScale({0,0,0})
     challengeOptionObject.setScale({0,0,0})
+    chaosOptionObject.setScale({0,0,0})
 end
 
 function showStartMenu()
@@ -287,6 +310,7 @@ function showStartMenu()
     zeroSevenOptionObject.setScale({1,1,1})
     jumpInOptionObject.setScale({1,1,1})
     challengeOptionObject.setScale({1,1,1})
+    chaosOptionObject.setScale({1,1,1})
 end
 
 function resetGame()
@@ -1214,7 +1238,7 @@ function co()
         if not isStacking
         then
             deck.dealToColor(stacking_Draw, currentPlayer.color)
-            stacking_Draw = 0
+            resetStacktingDraw()
             yieldState = nil
             nextPlayer(1)
             return
@@ -1291,7 +1315,7 @@ function co()
             if not isStacking
             then
                 deck.dealToColor(stacking_Draw, currentPlayer.color)
-                stacking_Draw = 0
+                resetStacktingDraw()
                 yieldState = nil
                 canChallenge = true
                 nextPlayer(1)
@@ -1314,7 +1338,7 @@ function co()
                 canChallenge = true
                 nextPlayer(1)
               end
-              stacking_Draw = 0
+              resetStacktingDraw()
             else
               if challengeButton ~= nil
               then
