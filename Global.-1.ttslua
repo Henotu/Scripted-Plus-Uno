@@ -20,7 +20,7 @@ DIRECTIONLOCATIONS = {  ["Green"]  = {   0,   1,    7},
                         ["Yellow"] = {  -5,   1,    5}}
 
 TOKENROTATIONS =     {  ["Green"]  = {    0, 180,    0},
-                        ["Blue"]   = {    0, 225,    0},
+                        ["Blue"]   = {    1, 225,    0},
                         ["Purple"] = {    0, 270,    0},
                         ["Pink"]   = {    0, 315,    0},
                         ["White"]  = {    0, 360,    0},
@@ -336,6 +336,7 @@ function resetGame()
     lastCardPlayedBy = nil
     lastPlayer = nil
     lastColor = nil
+    stacking_Draw = 0
 
     currentDirection_label.destruct()
     currentPlayer_label.destruct()
@@ -871,15 +872,15 @@ function updatePlayerLabel(this)
     this.lock()
     this.setColorTint(getColorfromPlayer(currentPlayer.color))
 
-    this.setPosition(getTokenLocation(currentPlayer.color))
-    this.setRotation(getTokenRotation(currentPlayer.color))
-
     if this.getButtons() ~= nil
     then
         this.editButton({index=0,label=currentPlayer.steam_name})
     else
         this.createButton({click_function='dummy', label=currentPlayer.steam_name, function_owner=Global, position={0, 0.1, 0}, rotation={0, 180, 0}, width=2250, height=400, font_size=350})
     end
+
+    this.setPosition(getTokenLocation(currentPlayer.color))
+    this.setRotation(getTokenRotation(currentPlayer.color))
 end
 
 function updateDirectionLabel(this)
